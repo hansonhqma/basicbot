@@ -4,7 +4,7 @@ import nltk
 def buildmarkov():
 	data = []
 	markov = dict()
-	file = open("comments_raw.txt")
+	file = open("data/comments_raw.txt")
 	while True:
 		line = file.readline().strip().lower()
 		if line == "":
@@ -39,7 +39,7 @@ def buildmarkov():
 def buildmarkovfromnltk(): #unused at the moment
 	nlktmarkov = dict()
 	raw_text = ""
-	file = open("comments_raw.txt")
+	file = open("data/comments_raw.txt")
 	while True:
 		line = file.readline().strip()
 		if line == "":
@@ -85,9 +85,9 @@ def servecomment(markovdictionary):
 
 if __name__ == "__main__":
 	chain = buildmarkov()
-
+	print("Markov chain generated, serving...")
 	while True:
-		userin = input("Serve (Enter) ")
+		userin = input(">>>> ")
 		if userin.lower() == "stop":
 			break
 		print("\t\t",servecomment(chain))

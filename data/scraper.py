@@ -5,7 +5,7 @@ from selenium.webdriver.common.by import By
   
 
 def runtime(address):
-	browser = webdriver.Chrome('/Applications/code/genthot/chromedriver')
+	browser = webdriver.Chrome('chromedriver')
 	browser.get(address)
 	while True:
 		try:
