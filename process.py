@@ -75,14 +75,41 @@ def analyzechain(markovchain):
 
 	return lengthlist
 
+def build_weighted_selections(chain, selectionlist):
+	weighted_selection_list = []
+	end_cases = 0
+	end_keys = []
+	for item in selectionlist:
+		if item[-1] == ";":
+			end_keys.append(item)
+			end_cases += 1
+			continue
+		child_count = len(chain[item])
+		for i in range(child_count):
+			weighted_selection_list += [item]
+	end_case_probablity = end_cases/len(selectionlist)
 
-def servecomment(markovdictionary):
-	output = [random.choice(list(markovdictionary.keys()))]
+	if end_case_probablity == 1:
+		return end_keys
+
+	elif end_cases > 0:
+		inflate = int(len(weighted_selection_list)/(1-float(end_case_probablity)))-len(weighted_selection_list)
+		inflate_per_case = inflate//end_cases
+		for item in end_keys:
+			for i in range(inflate_per_case):
+				weighted_selection_list.append(item)
+
+	return weighted_selection_list
+
+
+def serve_comment(markovdictionary):
+	weighted_list = build_weighted_selections(markovdictionary, list(markovdictionary.keys()))
+	output = [random.choice(weighted_list)]
 	initwords = list(markovdictionary.keys())
 
 	while True:
 		key = output[-1]
-		selections = list(markovdictionary[key])
+		selections = build_weighted_selections(markovdictionary, list(markovdictionary[key]))
 		word = random.choice(selections)
 		output.append(word)
 		if word[-1] == ";":
@@ -105,5 +132,5 @@ if __name__ == "__main__":
 		userin = input(": ")
 		if userin.lower() == "stop":
 			break
-		print("Pruned MDT:-----\t", servecomment(prunedchain))
-		print("Unpruned MDT:---\t", servecomment(chain))
+		print("Pruned MDT:-----\t", serve_comment(prunedchain))
+		print("Unpruned MDT:---\t", serve_comment(chain))
