@@ -13,7 +13,10 @@
         <input id="box" type="text" name="caption" value="" readonly="readonly">
     </div>
     <div class="push">
-        <input id="butt" type="button" name="button" value="Push to get caption" onclick="loadFile()">
+        <input id="butt" type="button" name="button" value="Push to get caption" onclick="myfunction()">
     </div>
+    <?php
+        echo file_get_contents("test.txt");
+    ?>
 </body>
 </html>
