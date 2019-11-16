@@ -4,13 +4,17 @@
     <meta charset="UTF-8">
     <title>ThotBot.io</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="script" href="getCap.js">
 </head>
 <body>
     <div class="header">
         <h1>Get your thotty comment here!</h1>
     </div>
     <div class="output">
-        <input type="text" name="caption" value="it works" readonly="readonly">
+        <input id="box" type="text" name="caption" value="" readonly="readonly">
+    </div>
+    <div class="push">
+        <input id="butt" type="button" name="button" value="Push to get caption" onclick="loadFile()">
     </div>
 </body>
 </html>
