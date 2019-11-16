@@ -1,5 +1,17 @@
+body{
+    background-color: tan;
+}
 div.header{
     text-align: center;
     padding-top: 100px;
     font-family: "Comic Sans MS";
+}
+div.output{
+    margin: 0 auto;
+}
+input[type=text]{
+    padding: 10px 320px;
+    border: 2px solid navy;
+    border-radius: 4px;
+    text-align: center;
 }
