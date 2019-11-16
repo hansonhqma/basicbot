@@ -1,5 +1,14 @@
 import random
-import nltk
+
+def prune_markov_chain(chaindictionary):
+	initwords = list(chaindictionary.keys())
+	post = list(chaindictionary.values())
+	for i in range(len(initwords)):
+		keysize = len(chaindictionary[initwords[i]])
+		if keysize == 1:
+			del chaindictionary[initwords[i]]
+
+	return chaindictionary
 
 def buildmarkov():
 	data = []
@@ -32,41 +41,26 @@ def buildmarkov():
 
 		markov[word] = nexts
 
+	#build pruned chain
+	pruned = markov.copy()
+	pruned = prune_markov_chain(pruned)
 
-	return markov
+	return markov, pruned
+
+def analyzechain(markovchain):
+	lengthlist = []
+	for i in range(len(markovchain)):
+		size = len(markovchain[list(markovchain.keys())[i]])
+		lengthlist.append(size)
+	maxval, maxindex = max(lengthlist), lengthlist.index(max(lengthlist))
+	minval, minindex = min(lengthlist), lengthlist.index(min(lengthlist))
+	maxunique, minunique = len(set(list(markovchain.values())[maxindex])), len(set(list(markovchain.values())[minindex]))
 
 
-def buildmarkovfromnltk(): #unused at the moment
-	nlktmarkov = dict()
-	raw_text = ""
-	file = open("data/comments_raw.txt")
-	while True:
-		line = file.readline().strip()
-		if line == "":
-			break
-		line = line.replace(";", "")
-		raw_text += str(line + " ")
-
-	tokens = nltk.word_tokenize(raw_text)
-	textobject = nltk.Text(tokens)
-	generation = str(textobject.generate()).replace("\n", "; ").split(" ")
-	generation[-1] += ";"
-	
-	for word in generation:
-		if word[-1] == ";":
-			continue
-
-		if word in list(nlktmarkov.keys()):
-			continue
-
-		indices = [i for i, x in enumerate(generation) if x == word]
-		nexts = []
-		for index in indices:
-			nexts.append(generation[index+1])
-
-		nlktmarkov[word] = nexts
-	return nlktmarkov
-
+	print("\n"+"="*20+" MARKOV CHAIN ANALYTICS "+"="*20+"\n")
+	print("--- {} unique initializer nodes\n".format(len(markovchain)))
+	print("--- '{}' has the largest branching factor, with {} child nodes and {} unique child nodes\n".format(list(markovchain.keys())[maxindex], maxval, maxunique))
+	print("--- '{}' has the smallest branching factor, with {} child notes and {} unique child nodes\n".format(list(markovchain.keys())[minindex], minval, minunique))
 
 def servecomment(markovdictionary):
 	output = [random.choice(list(markovdictionary.keys()))]
@@ -84,10 +78,14 @@ def servecomment(markovdictionary):
 
 
 if __name__ == "__main__":
-	chain = buildmarkov()
-	print("Markov chain generated, serving...")
+	chain, prunedchain = buildmarkov()
+	print("Markov chains generated - Analytics:")
+	analyzechain(chain)
+	analyzechain(prunedchain)
+	print("="*64)
+	print("\nPress enter to generate, type stop and enter to stop\n")
 	while True:
-		userin = input(">>>> ")
+		userin = input(": ")
 		if userin.lower() == "stop":
 			break
 		print("\t\t",servecomment(chain))
