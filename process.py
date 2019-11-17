@@ -1,5 +1,29 @@
 import random
 
+def distrubution_vector(chain, key):
+	dvector = [0]*(len(chain)+1)
+	weighted = build_weighted_selections(chain, chain[key])
+	totalsize = len(weighted)
+	wset = list(set(weighted))
+	for word in wset:
+		count = weighted.count(word)
+		probability = count/totalsize
+		if word in list(chain.keys()):
+			index = list(chain.keys()).index(word)
+			dvector[index] = round(probability, 5)
+		else:
+			dvector[-1] += round(probability, 5)
+	return dvector
+
+def build_state_matrix(chain):
+	M = []
+	keys = list(chain.keys())
+	for key in keys:
+		vector = distrubution_vector(chain, key)
+		M.append(vector)
+	M.append([0]*(len(chain)+1))
+	return M
+
 def chain_safe_remove(chain, key):
 	del chain[key]
 	keys = list(chain.keys())
@@ -10,16 +34,35 @@ def chain_safe_remove(chain, key):
 
 def prune_markov_chain(chaindictionary):
 	
-	for i in range(2):
-		removed = []
-		keys = list(chaindictionary.keys())
-		for key in keys:
-			values = chaindictionary[key]
-			if len(values) == i:
-				removed.append(key)
-		
-		for word in removed:
-			chain_safe_remove(chaindictionary, word)
+	removed = []
+	keys = list(chaindictionary.keys())
+	for key in keys:
+		values = chaindictionary[key]
+		if len(values) == 1:
+			removed.append(key)
+	
+	for word in removed:
+		chain_safe_remove(chaindictionary, word)
+
+	removed = []
+	keys = list(chaindictionary.keys())
+	for key in keys:
+		values = chaindictionary[key]
+		if len(values) == 0:
+			removed.append(key)
+	
+	for word in removed:
+		chain_safe_remove(chaindictionary, word)
+
+	#clean
+
+	allkeys = list(chaindictionary.keys())
+	for key in allkeys:
+		values = chaindictionary[key]
+		for word in values:
+			if not word[-1] == ";":
+				if word not in allkeys:
+					chaindictionary[key].remove(word)
 	
 
 	return chaindictionary
@@ -121,10 +164,8 @@ def serve_comment(markovdictionary):
 
 
 if __name__ == "__main__":
-	chain = build_markov()
 	prunedchain = prune_markov_chain(build_markov())
 	print("Markov chains generated - Analytics:")
-	unprunedll = analyzechain(chain)
 	prunedll = analyzechain(prunedchain)
 	print("="*64)
 	print("\nPress enter to generate, type stop and enter to stop\n")
@@ -133,4 +174,3 @@ if __name__ == "__main__":
 		if userin.lower() == "stop":
 			break
 		print("Pruned MDT:-----\t", serve_comment(prunedchain))
-		print("Unpruned MDT:---\t", serve_comment(chain))
