@@ -1,3 +1,4 @@
-const fs = require('fs')
-const text = fs.readFileSync("test.txt", 'utf-8');
-console.log(text);
+function myfunction(){
+    var x = document.getElementById("box")
+    x.value = 'help'
+}
