@@ -1,16 +1,15 @@
 body{
     background-color: #ccffff;
+    font-family: "Helvetica";
 }
 div.header{
     text-align: center;
-    padding-top: 75px;
-    font-family: "Helvetica";
-    font-size: 40px;
+    padding-top: 50px;
+    font-size: 32px;
 }
 div.subtitle{
     text-align: center;
     padding-bottom: 20px;
-    font-family: "Helvetica";
     font-size: 15px;
 }
 div.outparent{
@@ -18,7 +17,6 @@ div.outparent{
 }
 div.output{
     display: inline-block;
-    font-family: Helvetica;
     width: 700px;
     padding: 5px 5px 5px 5px;
     background-color: #66ccff;
@@ -44,7 +42,6 @@ button.butt{
 
 div.footer{
     padding-top: 15px;
-    font-family: "Helvetica";
     text-align: center;
     color: black;
 }
