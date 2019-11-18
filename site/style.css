@@ -17,9 +17,10 @@ div.subtitle{
 div.blurb{
     text-align: center;
     padding-top: 100px;
-    padding-left: 700px;
-    padding-right: 700px;
+    padding-left: 200px;
+    padding-right: 200px;
     font-family: "Verdana";
+    text-align: justify-all;
 }
 div.outparent{
     text-align: center;
