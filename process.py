@@ -33,14 +33,14 @@ def chain_safe_remove(chain, key):
 			chain[key2].remove(key)
 
 def prune_markov_chain(chaindictionary):
-	
+
 	removed = []
 	keys = list(chaindictionary.keys())
 	for key in keys:
 		values = chaindictionary[key]
 		if len(values) == 1:
 			removed.append(key)
-	
+
 	for word in removed:
 		chain_safe_remove(chaindictionary, word)
 
@@ -50,7 +50,7 @@ def prune_markov_chain(chaindictionary):
 		values = chaindictionary[key]
 		if len(values) == 0:
 			removed.append(key)
-	
+
 	for word in removed:
 		chain_safe_remove(chaindictionary, word)
 
@@ -63,7 +63,7 @@ def prune_markov_chain(chaindictionary):
 			if not word[-1] == ";":
 				if word not in allkeys:
 					chaindictionary[key].remove(word)
-	
+
 
 	return chaindictionary
 
