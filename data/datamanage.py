@@ -2,6 +2,7 @@ import requests
 from bs4 import BeautifulSoup
 from selenium import webdriver
 from selenium.webdriver.common.by import By
+from spellchecker import SpellChecker
 import string
 import os.path
 import time
@@ -34,6 +35,7 @@ def runtime(address):
 	return blocks
 
 def buildraw(): #removes all emojis from text
+	spell = SpellChecker()
 	legal = string.printable
 	comments = open("comments.txt")
 	towrite = open("comments_raw.txt", "r+")
@@ -52,8 +54,11 @@ def buildraw(): #removes all emojis from text
 		while '.' in line:
 			index = line.index('.')
 			line.pop(index)
-
-		line = "".join(line)
+		line = ("".join(line)).lower()
+		line = line.split(" ")
+		for i in range(len(line)):
+			line[i] = spell.correction(line[i])
+		line = " ".join(line)
 		line = line.strip() + ";"
 		if len(line) > 1:
 			towrite.write(line+"\n")
